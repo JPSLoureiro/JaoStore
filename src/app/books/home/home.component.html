@@ -1,0 +1,56 @@
+<nav class="navbar navbar-dark bg-dark sticky-top">
+  <div class="container-fluid">
+    <div class="navbar-brand" style="width: 250px;">
+      Books Store
+    </div>
+    <div>
+      <a routerLink="/add" class="btn btn-light">Add a new Book</a>
+    </div>
+    <div style="width: 250px;">
+      <input type="search" [(ngModel)]="searchBar" (ngModelChange)="search($event)" class="form-control" placeholder="Book search"/>
+    </div>
+  </div>
+</nav>
+
+<div class="container mt-2">
+  <div class="row row-cols-1 row-cols-md-3 g-4">
+    <div class="col" *ngFor="let book of booksView ">
+      <div class="card h-100" >
+          <img src="{{book.image == ''? imagem : book.image}}" class="card-img-top h-100">
+          <div class="card-body">
+            <h5 class="card-title">{{book.title}}</h5>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">{{book.author}}</li>
+              <li class="list-group-item"><p class="card-subtitle">Price</p> ${{book.cost}}</li>
+            </ul>
+          </div>
+          <div class="card-body">
+            <a class="btn btn-dark" [routerLink]="['/edit', book.id]">Edit</a>
+            <button class="btn btn-danger" type="button" (click)="openDeleteModal(book.id)">Delete</button>
+          </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Delete Confirmation</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Are you sure to delete this book?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-danger" (click)="confirmDelete()">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>

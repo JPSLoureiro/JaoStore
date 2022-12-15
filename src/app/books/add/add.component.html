@@ -1,0 +1,24 @@
+<div class="container">
+  <legend>Add new book</legend>
+  <div class="mb-3">
+    <label for="txtName" class="form-label">Name</label>
+    <input type="text" [(ngModel)]="bookForm.title" class="form-control" id="txtName">
+  </div>
+  <div class="mb-3">
+    <label for="txtAuthor" class="form-label">Author</label>
+    <input type="text" [(ngModel)]="bookForm.author" class="form-control" id="txtAuthor">
+  </div>
+  <div class="mb-3">
+    <label for="txtCost" class="form-label">Cost</label>
+    <input type="number" [(ngModel)]="bookForm.cost" class="form-control" id="txtCost">
+  </div>
+  <div class="mb-3">
+    <label for="txtFile" class="form-label">Image</label>
+    <input type="file" (change)="uploadfile($event)" accept="image/*" class="form-control" id="txtFile">
+  </div>
+  <!-- <div class="mb-3">
+    <label for="txtFile" class="form-label">Image URL</label>
+    <input type="file" [(ngModel)]="bookForm.image" accept="image/*" class="form-control" id="txtFile">
+  </div> -->
+  <button type="button" class="btn btn-dark" (click)="save()">Create</button>
+</div>
