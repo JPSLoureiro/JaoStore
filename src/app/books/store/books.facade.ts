@@ -1,7 +1,7 @@
 import { setAPIStatus } from './../../shared/store/app.action';
 import { selectAppState } from './../../shared/store/app.selector';
 import { Appstate } from './../../shared/store/appstate';
-import { invokeBooksAPI, invokeDeleteBookAPI, invokeSaveBookAPI, invokeUpdateBookAPI } from './../store/books.action';
+import { invokeBooksAPI, invokedBooks, invokeDeleteBookAPI, invokeSaveBookAPI, invokeUpdateBookAPI } from './../store/books.action';
 import { Book } from '../store/book';
 import { Component, OnInit } from '@angular/core';
 import { Store, select } from '@ngrx/store';
@@ -31,39 +31,21 @@ export class BooksFacade {
 
     save(bookForm: Book) {
       this.store.dispatch(invokeSaveBookAPI({ payload: { ...bookForm } }));
-      let appState$ = this.appStore.pipe(select(selectAppState));
-      appState$.subscribe((data) => {
-        if (data.apiStatus === 'success') {
-          this.appStore.dispatch(
-            setAPIStatus({ apiStatus: { apiStatus: '', apiResponseMessage: '' } })
-          );
-          this.router.navigate(['/']);
-        }
-      });
+    }
+
+    saveAll(allBooks: Book[]) {
+      this.store.dispatch(invokedBooks({ allBooks }));
     }
 
     update(bookForm: Book){
       this.store.dispatch(invokeUpdateBookAPI({payload:{...bookForm}}))
 
-      let appState$ = this.appStore.pipe(select(selectAppState))
-      appState$.subscribe((data) => {
-        if(data.apiStatus === 'success'){
-          this.appStore.dispatch(setAPIStatus({apiStatus:{apiStatus:'', apiResponseMessage:''}}));
-          this.router.navigate(['/'])
-        }
-      })
+
     }
 
 
-    delete(idToDelete: number){
+    delete(idToDelete: string){
       this.store.dispatch(invokeDeleteBookAPI({id: idToDelete}))
-
-      let appState$ = this.appStore.pipe(select(selectAppState))
-      appState$.subscribe((data) => {
-        if(data.apiStatus === 'success'){
-          this.appStore.dispatch(setAPIStatus({apiStatus:{apiStatus:'', apiResponseMessage:''}}));
-        }
-      })
     }
 
 }

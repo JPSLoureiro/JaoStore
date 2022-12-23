@@ -16,7 +16,7 @@ import { Router } from '@angular/router';
 })
 export class AddComponent implements OnInit {
   bookForm: Book = {
-    id: 0,
+    id: '',
     author: '',
     title: '',
     cost: 0,
@@ -58,5 +58,14 @@ export class AddComponent implements OnInit {
 
   save() {
     this.BooksFacade.save(this.bookForm);
+    let appState$ = this.appStore.pipe(select(selectAppState));
+      appState$.subscribe((data) => {
+        if (data.apiStatus === 'success') {
+          this.appStore.dispatch(
+            setAPIStatus({ apiStatus: { apiStatus: '', apiResponseMessage: '' } })
+          );
+          this.router.navigate(['/']);
+        }
+      });
   }
 }

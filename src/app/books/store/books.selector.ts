@@ -3,7 +3,7 @@ import { createFeatureSelector, createSelector } from "@ngrx/store";
 
 export const selectBooks = createFeatureSelector<Book[]>("mybooks")
 
-export const selectBookById = (bookId: number) => {
+export const selectBookById = (bookId: string) => {
   return createSelector(selectBooks, (books: Book[]) => {
     let bookById = books.filter(_ => _.id == bookId);
     if(bookById.length == 0){

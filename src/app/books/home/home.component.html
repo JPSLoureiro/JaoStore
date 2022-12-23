@@ -6,15 +6,40 @@
     <div>
       <a routerLink="/add" class="btn btn-light">Add a new Book</a>
     </div>
-    <div style="width: 250px;">
+    <div>
       <input type="search" [(ngModel)]="searchBar" (ngModelChange)="search($event)" class="form-control" placeholder="Book search"/>
     </div>
+
+
+
+
+
+
+
+
+
+
+
+
+    <ng-container  *ngIf="user$ | async as user; else authOptions" class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <img [src]="user.photoURL" alt="profile-img" style="border-radius: 100%; width: 38px;">
+      </a>
+      <ul class="dropdown-menu" style="margin-left: 90%;">
+
+        <li><a *ngIf="!loginButton" class="dropdown-item" (click)="logout()">Logout</a></li>
+      </ul>
+    </ng-container>
+    <ng-template #authOptions >
+      <button class="btn btn-primary" (click)="login()">login<i class="fa-brands fa-google"></i></button>
+    </ng-template>
   </div>
 </nav>
 
 <div class="container mt-2">
   <div class="row row-cols-1 row-cols-md-3 g-4">
     <div class="col" *ngFor="let book of booksView ">
+      <!-- <pre>{{book | json}}</pre> -->
       <div class="card h-100" >
           <img src="{{book.image == ''? imagem : book.image}}" class="card-img-top h-100">
           <div class="card-body">
@@ -33,6 +58,8 @@
     </div>
   </div>
 </div>
+<!--
+<pre>{{ testDocValue$ | async | json }}</pre> -->
 
 
 

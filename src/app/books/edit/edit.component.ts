@@ -20,7 +20,7 @@ export class EditComponent implements OnInit {
   constructor(private store: Store, private route: ActivatedRoute, private router:Router, private appStore:Store<Appstate>, private BooksFacade: BooksFacade) { }
 
   bookForm : Book = {
-    id:0,
+    id:'',
     author: '',
     title: '',
     cost:0,
@@ -32,7 +32,7 @@ export class EditComponent implements OnInit {
       switchMap((param) => {
         console.log(param);
 
-        const id = Number(param.get('id'));
+        const id = String(param.get('id'));
         console.log("Id: " + id);
 
         return this.store.pipe(select(selectBookById(id)))
@@ -70,5 +70,12 @@ export class EditComponent implements OnInit {
 
   update(){
     this.BooksFacade.update(this.bookForm);
+    let appState$ = this.appStore.pipe(select(selectAppState))
+      appState$.subscribe((data) => {
+        if(data.apiStatus === 'success'){
+          this.appStore.dispatch(setAPIStatus({apiStatus:{apiStatus:'', apiResponseMessage:''}}));
+          this.router.navigate(['/'])
+        }
+      })
   }
 }
