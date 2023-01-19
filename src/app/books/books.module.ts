@@ -1,3 +1,4 @@
+import { BooksService } from './books.service';
 import { BooksFacade } from './store/books.facade';
 import { EffectsModule } from '@ngrx/effects';
 import { bookReducer } from './store/books.reducer';
@@ -26,6 +27,6 @@ import { EditComponent } from './edit/edit.component';
     StoreModule.forFeature("mybooks", bookReducer),
     EffectsModule.forFeature([BooksEffects])
   ],
-  providers: [BooksFacade]
+  providers: [BooksFacade, BooksService]
 })
 export class BooksModule { }

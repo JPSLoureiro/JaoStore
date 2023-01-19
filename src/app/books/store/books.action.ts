@@ -17,7 +17,7 @@ export const invokeSaveBookAPI = createAction(
 
 export const savedBook = createAction(
   "[Books API] Saved books success",
-  props<{saved:Book}>()
+  props<{saved:any}>()
 )
 
 export const invokeUpdateBookAPI = createAction(
@@ -27,15 +27,15 @@ export const invokeUpdateBookAPI = createAction(
 
 export const updatedBook = createAction(
   "[Books API] Updated books success",
-  props<{updated:Book}>()
+  props<{updated:any}>()
 )
 
 export const invokeDeleteBookAPI = createAction(
   "[Books API] invoke Delete book Api",
-  props<{id:number}>()
+  props<{id:string}>()
 )
 
 export const deletedBook = createAction(
   "[Books API] Deleted books success",
-  props<{id:number}>()
+  props<{id:any}>()
 )

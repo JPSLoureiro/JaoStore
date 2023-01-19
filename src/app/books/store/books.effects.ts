@@ -5,7 +5,8 @@ import { BooksService } from '../books.service';
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { invokeBooksAPI, invokedBooks, invokeSaveBookAPI, savedBook, invokeUpdateBookAPI, updatedBook, invokeDeleteBookAPI, deletedBook } from './books.action';
-import { switchMap, map } from 'rxjs';
+import { switchMap, map, tap } from 'rxjs';
+import { Book } from './book';
 
 
 @Injectable()
@@ -18,28 +19,29 @@ export class BooksEffects {
   loadAllBooks$ = createEffect(() =>
     this.actions$.pipe(
       ofType(invokeBooksAPI),
-      switchMap(() => {
-        return this.bookService.get()
-        .pipe(
-          map((data) => invokedBooks({allBooks: data}))
-        )
-    })
-  ));
+      tap(()=> this.bookService.get())
+  ), {dispatch: false});
 
   saveNewBook$ = createEffect(() =>
     this.actions$.pipe(
       ofType(invokeSaveBookAPI),
-      switchMap((action) => {
-        this.appStore.dispatch(setAPIStatus({apiStatus:{apiResponseMessage:'', apiStatus:''}}))
-        return this.bookService.create(action.payload)
-        .pipe(
-          map((data) => {
-            this.appStore.dispatch(setAPIStatus({apiStatus:{apiResponseMessage:'', apiStatus:'success'}}))
-            return savedBook({saved: data})
-          })
-        )
+      // switchMap((action) => {
+      //   this.appStore.dispatch(setAPIStatus({apiStatus:{apiResponseMessage:'', apiStatus:''}}))
+      //   return this.bookService.create(action.payload)
+      //   .pipe(
+      //     map((data) => {
+      //       this.appStore.dispatch(setAPIStatus({apiStatus:{apiResponseMessage:'', apiStatus:'success'}}))
+      //       return savedBook({saved: data})
+      //     })
+      //   )
+      // })
+      tap((action) => {
+        this.bookService.create(action.payload).then(resp => {
+          this.appStore.dispatch(setAPIStatus({apiStatus:{apiResponseMessage:'', apiStatus:'success'}}))
+          return savedBook({saved:resp})
+        })
       })
-    )
+    ), { dispatch: false }
   );
 
   updateBook$ = createEffect(() =>
@@ -55,22 +57,19 @@ export class BooksEffects {
           })
         )
       })
-    )
+      // tap((action) => {
+      //   this.bookService.update(action.payload).then(resp => {
+      //     this.appStore.dispatch(setAPIStatus({apiStatus:{apiResponseMessage:'', apiStatus:'success'}}))
+      //     return updatedBook({updated: resp})
+      //   })
+      // })
+    ), //{dispatch: false}
   );
 
   deleteBook$ = createEffect(() =>
     this.actions$.pipe(
       ofType(invokeDeleteBookAPI),
-      switchMap((action) => {
-        this.appStore.dispatch(setAPIStatus({apiStatus:{apiResponseMessage:'', apiStatus:''}}))
-        return this.bookService.delete(action.id)
-        .pipe(
-          map((data) => {
-            this.appStore.dispatch(setAPIStatus({apiStatus:{apiResponseMessage:'', apiStatus:'success'}}))
-            return deletedBook({id: action.id})
-          })
-        )
-      })
-    )
+      tap((action) => this.bookService.delete(action.id))
+    ), { dispatch: false}
   );
 }
